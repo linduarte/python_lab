@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Camera Access</title>
+</head>
+
+<body>
+    <h1>Camera Access</h1>
+
+    <!-- Create a video element to display the camera feed -->
+    <video id="camera-feed" autoplay></video>
+
+    <!-- Create a button to capture a photo -->
+    <button id="capture-button">Capture Photo</button>
+
+    <!-- Create an image element to display the captured photo -->
+    <img id="captured-photo" alt="Captured Photo">
+
+    <script>
+        // Get the video element and set the source to the camera
+        const video = document.getElementById('camera-feed');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.error('Error accessing the camera: ' + error);
+            });
+
+        // Get the capture button and add a click event listener
+        const captureButton = document.getElementById('capture-button');
+        captureButton.addEventListener('click', function () {
+            // Get the canvas element to capture a photo
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Create an image element to display the captured photo
+            const capturedPhoto = document.getElementById('captured-photo');
+            capturedPhoto.src = canvas.toDataURL('image/png');
+        });
+    </script>
+</body>
+
+</html>
